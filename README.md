@@ -7,6 +7,8 @@ A tag-based app organizer for Android that works *alongside* your launcher, not 
 > *Rassurez-vous : aucune filature ici. AppFiler range vos applis, rien de plus.*
 
 > **Status:** planning. There's no code yet—this README is the design, posted for comments before the first line is written.
+>
+> AppFiler is an independent project, built and tested on GrapheneOS but not affiliated with or endorsed by the GrapheneOS project.
 
 ## Why
 
