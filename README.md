@@ -116,7 +116,7 @@ AppFiler is free and will stay free, with nothing held back for donors. If it's 
 
 If you'd also like to donate, Bitcoin is welcome through the project's BTCPay Server page:
 
-**[Donate with Bitcoin](https://DONATION-PAGE-URL)**
+*Donation page coming soon.*
 
 BTCPay Server is free, open-source and self-hosted. It creates a new address for every donation, so donations can't be linked to each other, and no account or email address is needed.
 
