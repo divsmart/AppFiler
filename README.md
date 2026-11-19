@@ -43,9 +43,10 @@ The aim is an app that never asks you to approve a permission at all. These rule
 **Automatic labelling from a rule file.** A plain-text file maps app IDs to labels, for example:
 
 ```
-org.fossify.*        Tools
-com.nextcloud.*      Cloud
-helium314.keyboard   Tools
+dev.soupslurpr.appverifier   Security
+dev.imranr.obtainium         Security
+dev.soupslurpr.beautyxt      Writing
+helium314.keyboard           Tools
 ```
 
 New installs that match a rule are labelled straight away. Android's own app categories (game, audio, social, productivity and so on) fill the gaps where a developer has set one. The rule file is yours to read and edit, with no guessing and nothing fetched from the internet.
