@@ -56,7 +56,17 @@ AppFiler follows the same line as the Linux kernel: AI coding assistants are too
 
 So use whatever tools help you work. Whatever you used, you should understand every line you submit, have built and tested it yourself, and be able to answer questions about it in review.
 
-The same applies at the top. The maintainer reviews every change before it's merged and takes final responsibility for everything that goes into a release.
+**Say when you used AI.** If an AI tool wrote or substantially shaped part of your change, say so in the pull request and add a trailer to the commit naming the tool and model, the way the kernel does:
+
+```
+Assisted-by: Claude:claude-opus-5-5
+```
+
+Claude Code adds its own `Co-Authored-By: Claude …` line, and that's fine too. Editors, compilers, linters and autocomplete don't need a mention.
+
+**Only people sign off.** An AI tool must never add a `Signed-off-by` line. The DCO is a statement that only a person can make, so add the sign-off yourself, once you've reviewed the change.
+
+**The same applies at the top.** The maintainer writes AppFiler with Claude Code, under the rules in this file and the README, and those commits carry a `Co-Authored-By` line so anyone can see which code came from where. Every change is reviewed before it's merged, and the maintainer takes final responsibility for everything that goes into a release. If you'd rather write code entirely by hand, that's welcome, and so is careful review from people who read AI-written code with a critical eye.
 
 ## Reporting a security problem
 

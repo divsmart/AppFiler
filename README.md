@@ -9,6 +9,8 @@ A tag-based app organizer for Android that works *alongside* your launcher, not 
 > **Status:** planning. There's no code yet—this README is the design, posted for comments before the first line is written.
 >
 > AppFiler is an independent project, built and tested on GrapheneOS but not affiliated with or endorsed by the GrapheneOS project.
+>
+> **How it's built:** the code is written with Claude Code, Anthropic's AI coding tool, and every commit it helped with says so in a `Co-Authored-By` line. The design, the privacy rules and the decision to merge are human, and every change is reviewed before it goes in. Hand-written contributions are just as welcome—see [CONTRIBUTING.md](CONTRIBUTING.md#youre-responsible-for-what-you-submit).
 
 ## Why
 
