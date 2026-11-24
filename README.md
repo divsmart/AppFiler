@@ -6,7 +6,7 @@ A tag-based app organizer for Android that works *alongside* your launcher, not 
 >
 > *Rassurez-vous : aucune filature ici. AppFiler range vos applis, rien de plus.*
 
-> **Status:** planning. There's no code yet—this README is the design, posted for comments before the first line is written.
+> **Status:** early skeleton. The project builds an empty app with no permissions, and nothing more yet. Most of this README is still the design, posted for comments while the features are built.
 >
 > AppFiler is an independent project, built and tested on GrapheneOS but not affiliated with or endorsed by the GrapheneOS project.
 >
@@ -80,13 +80,17 @@ apksigner verify --print-certs AppFiler-<version>.apk
 
 ## Checking the claims yourself
 
-Don't take a README's word for it. List the permissions the app asks for:
+Don't take a README's word for it. Check the permissions in the app you actually install, not only the source code: libraries can add permissions to an app at build time, so the source manifest doesn't tell the whole story.
+
+On a computer, list the permissions in the APK with `aapt2` from the Android SDK build tools:
 
 ```bash
-grep -n "uses-permission" app/src/main/AndroidManifest.xml
+aapt2 dump permissions AppFiler-<version>.apk
 ```
 
-On the phone, Settings → Apps → AppFiler shows the same thing. If Network isn't listed, the app can't reach the internet. And because the full source is here, anyone can build it and compare.
+It should print only the package name, with no `uses-permission` lines.
+
+On the phone, Settings → Apps → AppFiler → Permissions shows the same thing. If Network isn't listed, the app can't reach the internet. And because the full source is here, anyone can build it and compare.
 
 ## Technical outline
 

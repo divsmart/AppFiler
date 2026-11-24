@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <!-- Platform theme, so no AppCompat dependency. Compose draws the UI. -->
+    <style name="Theme.AppFiler" parent="android:Theme.Material.NoActionBar" />
+</resources>

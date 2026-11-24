@@ -33,3 +33,14 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Release signing (see app/build.gradle.kts); never commit these
+keystore.properties
+signing.properties
+
+# Build outputs
+*.apks
+/app/release/
+
+# macOS
+.DS_Store

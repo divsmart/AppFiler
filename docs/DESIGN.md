@@ -18,7 +18,7 @@ These are fixed. Any change that breaks one is wrong, however useful it seems.
 - `android:allowBackup="false"`, plus data-extraction rules that exclude everything (Android 12+), so nothing goes to cloud backup
 - No data leaves the app except through an export the user starts and saves through the system file picker
 
-The test for every release: `grep uses-permission app/src/main/AndroidManifest.xml` should print nothing.
+The test for every release: `aapt2 dump permissions` on the built APK should list no permissions. Checking the source manifest isn't enough, because libraries can merge permissions in at build time (`androidx.core` adds one, which the manifest removes with `tools:node="remove"`).
 
 ## Platform
 
@@ -27,7 +27,7 @@ The test for every release: `grep uses-permission app/src/main/AndroidManifest.x
 | Language and UI | Kotlin, Jetpack Compose |
 | Minimum Android | 8.0 (API 26) |
 | Target | The current Android version, kept up to date each year |
-| App ID | **Open—must be decided before the first build** (see below) |
+| App ID | **`org.appfiler`** (decided: the project owns appfiler.org) |
 | Licence | GPL-3.0-or-later |
 | Primary test device | Pixel running GrapheneOS |
 
@@ -114,7 +114,6 @@ Each milestone ends with a working build installed on a real phone, and the hard
 
 ## Open decisions
 
-- **App ID**: `io.github.divsmart.appfiler` or `com.divsmart.appfiler`. Permanent once released.
 - **Widget style**: one widget per label, or one widget with label tabs (asked in the README).
 - **Rule file details**: as above, pending feedback.
 - **Starter rules**: whether a starter rule file ships with the app, and what's in it.
