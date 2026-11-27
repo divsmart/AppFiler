@@ -32,7 +32,7 @@ Only official builds are supported, the ones signed with the key whose fingerpri
 ## Please don't
 
 - send questions by email or private message. Answers given in public help the next person with the same question.
-- post your full app list or exported label file in public. It says a lot about you. If a file is needed to reproduce a problem, cut it down to the lines that matter.
+- post your full app list or export file in public. It says a lot about you. If a file is needed to reproduce a problem, cut it down to the lines that matter.
 
 ## Want to support the project?
 

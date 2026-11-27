@@ -2,7 +2,7 @@
 
 A tag-based app organizer for Android that works *alongside* your launcher, not instead of it. Built for GrapheneOS first, with privacy as the one non-negotiable.
 
-> **A word to our French-speaking users:** yes, we know. In French, *filer quelqu'un* means to tail them, the way the police shadow a suspect—and an app that follows you around is the last thing this project wants to be. The name is English: a filer is someone who files things away. AppFiler files your apps under labels, and the only thing it ever follows is your rule file.
+> **A word to our French-speaking users:** yes, we know. In French, *filer quelqu'un* means to tail them, the way the police shadow a suspect—and an app that follows you around is the last thing this project wants to be. The name is English: a filer is someone who files things away. AppFiler files your apps under tags, and the only thing it ever follows is your rule file.
 >
 > *Rassurez-vous : aucune filature ici. AppFiler range vos applis, rien de plus.*
 
@@ -14,7 +14,7 @@ A tag-based app organizer for Android that works *alongside* your launcher, not 
 
 ## Why
 
-Anyone who used Android a decade ago may remember Apps Organizer and its fork Apps2Org. You gave each app as many labels as you liked, put a widget for each label on your home screen, and kept whichever launcher you preferred. New apps landed in an "Other Apps" bucket so nothing got lost. It was a simple idea, well ahead of its time, and it's been unmaintained since 2013. It won't even install on a modern phone.
+Anyone who used Android a decade ago may remember Apps Organizer and its fork Apps2Org. You gave each app as many labels as you liked (AppFiler calls them tags), put a widget for each label on your home screen, and kept whichever launcher you preferred. New apps landed in an "Other Apps" bucket so nothing got lost. It was a simple idea, well ahead of its time, and it's been unmaintained since 2013. It won't even install on a modern phone.
 
 The stock GrapheneOS launcher is good at its job and it's staying where it is. What's missing is a way to organize apps by *what they're for*—Banking, Travel, Church, Tools—without manually juggling folders, and without handing a third-party launcher the keys to the phone.
 
@@ -31,20 +31,20 @@ So the rules are fixed from day one:
 - **No usage-access permission.** "Most used" sorting counts only the apps you open *through AppFiler*, never your system-wide usage history.
 - **No storage permission.** Exports and imports go through Android's own file picker, which grants access to the one file you choose.
 - **No proprietary code.** No Google Play Services, Firebase, analytics or crash reporting. The only dependencies are Kotlin, AndroidX and Jetpack Compose, all under the Apache 2.0 licence.
-- **No automatic cloud backup.** Labels and rules stay in the app's private storage until *you* export them.
+- **No automatic cloud backup.** Tags and rules stay in the app's private storage until *you* export them.
 - **No built-in updater.** The app never checks for updates or downloads anything. Updates come through Obtainium or an app store, where you stay in control.
 
 The aim is an app that never asks you to approve a permission at all. These rules aren't up for negotiation in pull requests either—see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Planned features
 
-**Labels.** Give any app as many labels as you like. One app can sit under both Banking and Travel.
+**Tags.** Give any app as many tags as you like. One app can sit under both Banking and Travel.
 
-**A widget per label.** Put a Banking widget, a Tools widget, a Church widget on your home screen, the way Apps2Org did. Tap an icon in the widget and the app opens. Your launcher stays untouched.
+**A widget per tag.** Put a Banking widget, a Tools widget, a Church widget on your home screen, the way Apps2Org did. Tap an icon in the widget and the app opens. Your launcher stays untouched.
 
-**An "Other Apps" inbox.** Each time AppFiler opens, it checks for apps installed since last time. Anything not yet labelled waits in the inbox, so new installs are never lost.
+**An "Other Apps" inbox.** Each time AppFiler opens, it checks for apps installed since last time. Anything not yet tagged waits in the inbox, so new installs are never lost.
 
-**Automatic labelling from a rule file.** A plain-text file maps app IDs to labels, for example:
+**Automatic tagging from a rule file.** A plain-text file maps app IDs to tags, for example:
 
 ```
 dev.soupslurpr.appverifier   Security
@@ -53,11 +53,11 @@ dev.soupslurpr.beautyxt      Writing
 helium314.keyboard           Tools
 ```
 
-New installs that match a rule are labelled straight away. Android's own app categories (game, audio, social, productivity and so on) fill the gaps where a developer has set one. The rule file is yours to read and edit, with no guessing and nothing fetched from the internet.
+New installs that match a rule are tagged straight away. Android's own app categories (game, audio, social, productivity and so on) fill the gaps where a developer has set one. The rule file is yours to read and edit, with no guessing and nothing fetched from the internet.
 
-**Plain-text export and import.** Labels and rules export to a readable file, so a factory reset or a new phone doesn't cost you your setup, and you can see exactly what's in it.
+**Plain-text export and import.** Tags and rules export to a readable file, so a factory reset or a new phone doesn't cost you your setup, and you can see exactly what's in it.
 
-**Shortcuts to a single label.** Pin a home-screen shortcut that opens AppFiler straight to one label, or to the inbox.
+**Shortcuts to a single tag.** Pin a home-screen shortcut that opens AppFiler straight to one tag, or to the inbox.
 
 ## Official builds
 
@@ -104,7 +104,7 @@ On the phone, Settings → Apps → AppFiler → Permissions shows the same thin
 
 This project borrows ideas, and possibly code, from:
 
-- **[Apps Organizer](https://code.google.com/p/appsorganizer)** (2009), the original label-based organizer. GPL-3.0-or-later.
+- **[Apps Organizer](https://code.google.com/p/appsorganizer)** (2009) by Fabio Collini, the original label-based organizer. GPL-3.0-or-later.
 - **[Apps2Org](https://github.com/pfalcon/apps2org)** by Paul Sokolovsky, its fork, which introduced the "Other Apps" category. GPL-3.0-or-later.
 - **[AppStow](https://github.com/1260er/AppStow)**, for multi-category apps, new-install detection and counting only its own launches. GPL-3.0-or-later.
 - **[Pixel Tag Drawer](https://github.com/iwadjp/pixel-tag-drawer)**, for shortcuts that open one tag and an untagged view. MIT.
@@ -137,7 +137,7 @@ GPL-3.0-or-later, continuing the Apps Organizer and Apps2Org line. Fork it, chan
 
 Before any code gets written, it would help to hear:
 
-- Is a widget per label the right way in, or would you rather have one widget with label tabs?
-- What should the rule file look like? Plain `app-id label` lines, or something more structured?
-- Which apps would you want labelled out of the box, if a starter rule file shipped with the app?
+- Is a widget per tag the right way in, or would you rather have one widget with tag tabs?
+- What should the rule file look like? Plain `app-id tag` lines, or something more structured?
+- Which apps would you want tagged out of the box, if a starter rule file shipped with the app?
 - Anything here that would stop you trusting it?

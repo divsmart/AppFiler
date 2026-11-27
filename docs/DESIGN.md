@@ -4,7 +4,7 @@ This is the working design: what's decided, what's still open, and the order thi
 
 ## What AppFiler is, and isn't
 
-AppFiler is an ordinary Android app that sorts installed apps under user-defined labels and opens them from home-screen widgets and shortcuts. It is **not a launcher**: it never registers as a home screen, and the user's launcher stays exactly as it is.
+AppFiler is an ordinary Android app that sorts installed apps under user-defined tags and opens them from home-screen widgets and shortcuts. It is **not a launcher**: it never registers as a home screen, and the user's launcher stays exactly as it is.
 
 ## Hard constraints
 
@@ -31,14 +31,14 @@ The test for every release: `aapt2 dump permissions` on the built APK should lis
 | Licence | GPL-3.0-or-later |
 | Primary test device | Pixel running GrapheneOS |
 
-API 26 is the floor because three things the design depends on arrived in it: `PackageManager.getChangedPackages()` (detecting new installs without broadcasts), `ApplicationInfo.category` (the fallback for automatic labelling) and `ShortcutManager.requestPinShortcut()` (pinned label shortcuts).
+API 26 is the floor because three things the design depends on arrived in it: `PackageManager.getChangedPackages()` (detecting new installs without broadcasts), `ApplicationInfo.category` (the fallback for automatic tagging) and `ShortcutManager.requestPinShortcut()` (pinned tag shortcuts).
 
 ## Data model
 
 - **App**: identified by package name plus launcher activity, since one package can have more than one launcher icon. Name and icon are read from the system each time, never stored.
-- **Label**: a name chosen by the user, with an order and an optional icon or colour.
-- **Assignment**: links an app to a label. Many-to-many: an app can have any number of labels.
-- **Rule**: a pattern and a label, from the rule file.
+- **Tag**: a name chosen by the user, with an order and an optional icon or colour.
+- **Assignment**: links an app to a tag. Many-to-many: an app can have any number of tags.
+- **Rule**: a pattern and a tag, from the rule file.
 - **Launch count**: per app, counting only launches made through AppFiler. Used for "most used" sorting.
 
 Storage is Room (AndroidX) in the app's private storage.
@@ -47,15 +47,15 @@ Storage is Room (AndroidX) in the app's private storage.
 
 **Finding apps.** Query the package manager for activities matching `MAIN`/`LAUNCHER`. That's every app with a launcher icon, and nothing else.
 
-**New installs.** On each start, call `getChangedPackages()` with the last sequence number seen. New apps are matched against the rules; anything no rule matches goes to the "Other Apps" inbox. Uninstalled apps are removed from their labels. No permanent broadcast receiver is needed.
+**New installs.** On each start, call `getChangedPackages()` with the last sequence number seen. New apps are matched against the rules; anything no rule matches goes to the "Other Apps" inbox. Uninstalled apps are removed from their tags. No permanent broadcast receiver is needed.
 
-**Automatic labelling.** Rules first, then Android's own category (game, audio, video, image, social, news, maps, productivity) for apps whose developer set one. See "Interaction design" for how user choices take priority.
+**Automatic tagging.** Rules first, then Android's own category (game, audio, video, image, social, news, maps, productivity) for apps whose developer set one. See "Interaction design" for how user choices take priority.
 
-**Widgets.** One widget instance per label, chosen when the widget is placed. Tapping an icon opens that app directly. Whether to build widgets with Glance (AndroidX) or plain `RemoteViews` is decided at milestone 3.
+**Widgets.** One widget instance per tag, chosen when the widget is placed. Tapping an icon opens that app directly. Whether to build widgets with Glance (AndroidX) or plain `RemoteViews` is decided at milestone 3.
 
-**Shortcuts.** Pinned shortcuts that open AppFiler straight to one label, or to the inbox.
+**Shortcuts.** Pinned shortcuts that open AppFiler straight to one tag, or to the inbox.
 
-**Export and import.** Through the system file picker, so no storage permission is needed. One plain-text file holds labels, assignments and rules, readable by a person.
+**Export and import.** Through the system file picker, so no storage permission is needed. One plain-text file holds tags, assignments and rules, readable by a person.
 
 ## Interaction design
 
@@ -63,23 +63,23 @@ The aim: organizing should be close to effortless. The user should rarely have t
 
 **Automation first.** On first run, rules and Android's categories file every app they can. The app reports the result ("48 apps filed, 12 waiting in the inbox") rather than presenting everything unsorted.
 
-**The inbox is the to-do list.** Unlabelled apps wait in "Other Apps", each showing suggested labels as chips. One tap accepts a suggestion. An empty inbox means everything is organized.
+**The inbox is the to-do list.** Untagged apps wait in "Other Apps", each showing suggested tags as chips. One tap accepts a suggestion. An empty inbox means everything is organized.
 
-**Label chips for filing.** Each app shows its labels as chips that toggle on and off with a tap. Because an app can carry several labels, chips are faster than dragging an app to each label in turn.
+**Tag chips for filing.** Each app shows its tags as chips that toggle on and off with a tap. Because an app can carry several tags, chips are faster than dragging an app to each tag in turn.
 
-**Multi-select.** Long-press to select several apps, then apply or remove a label for all of them in one action.
+**Multi-select.** Long-press to select several apps, then apply or remove a tag for all of them in one action.
 
 **AppFiler learns from manual filing.** When the user files an app by hand, AppFiler offers to turn that into a rule, for example: "File other apps from dev.soupslurpr under Writing too?" Accepting adds a line to the rule file. Declining changes nothing, and the app can be told not to ask again for that developer.
 
-**Drag and drop for ordering.** Drag to reorder apps within a label and the labels themselves; widgets follow that order. Dragging an app onto a label also files it, as a shortcut. Home-screen widgets can't support dragging inside them (Android only lets launchers move or resize a whole widget), so all rearranging happens in AppFiler.
+**Drag and drop for ordering.** Drag to reorder apps within a tag and the tags themselves; widgets follow that order. Dragging an app onto a tag also files it, as a shortcut. Home-screen widgets can't support dragging inside them (Android only lets launchers move or resize a whole widget), so all rearranging happens in AppFiler.
 
 **Undo instead of confirmations.** Every change can be undone for a few seconds, so no action needs an "Are you sure?" dialog.
 
-**Labels created in place.** A new label can be created from inside the chip list, without leaving the current screen.
+**Tags created in place.** A new tag can be created from inside the chip list, without leaving the current screen.
 
-**Accessible alternatives.** Every drag action has a long-press menu equivalent ("Add to label…", "Remove from label", "Move up/down") for people who can't drag easily or use a screen reader.
+**Accessible alternatives.** Every drag action has a long-press menu equivalent ("Add to tag…", "Remove from tag", "Move up/down") for people who can't drag easily or use a screen reader.
 
-**User choices win.** Labels the user sets or removes by hand are never overridden by rules or categories. Each label on an app records where it came from: user, rule or category.
+**User choices win.** Tags the user sets or removes by hand are never overridden by rules or categories. Each tag on an app records where it came from: user, rule or category.
 
 Drag-to-reorder must be built with what Compose provides, without adding a reordering library, in line with the dependency rule.
 
@@ -92,9 +92,9 @@ dev.imranr.obtainium         Security
 dev.soupslurpr.*             Tools
 ```
 
-- One rule per line: an app ID or pattern, whitespace, then a label name
+- One rule per line: an app ID or pattern, whitespace, then a tag name
 - A trailing `*` matches any app ID with that prefix
-- An app matching several rules gets every matching label
+- An app matching several rules gets every matching tag
 - Lines that don't parse are reported to the user, never silently dropped
 
 This is open for comment in the forum and Discussions, and may change before milestone 5.
@@ -104,20 +104,24 @@ This is open for comment in the forum and Discussions, and may change before mil
 Each milestone ends with a working build installed on a real phone, and the hard constraints checked.
 
 1. **Skeleton.** Empty Compose app, final app ID, manifest with no permissions, release signing set up. Builds and installs.
-2. **App list and labels.** List launchable apps; create, rename, reorder and delete labels (including in place from the chip list); assign apps with label chips and multi-select; drag to reorder; long-press menu equivalents; undo.
-3. **Widgets.** A widget per label that opens apps, in the order set in AppFiler.
-4. **Inbox.** New-install detection and the "Other Apps" view, with suggested-label chips.
-5. **Rules.** Rule file parsing, automatic labelling, Android-category fallback, the first-run summary, and offering to turn manual filing into rules.
+2. **App list and tags.** List launchable apps; create, rename, reorder and delete tags (including in place from the chip list); assign apps with tag chips and multi-select; drag to reorder; long-press menu equivalents; undo.
+3. **Widgets.** A widget per tag that opens apps, in the order set in AppFiler.
+4. **Inbox.** New-install detection and the "Other Apps" view, with suggested-tag chips.
+5. **Rules.** Rule file parsing, automatic tagging, Android-category fallback, the first-run summary, and offering to turn manual filing into rules.
 6. **Export and import.**
-7. **Shortcuts and polish.** Pinned label shortcuts, "most used" sorting, first-run explanation.
+7. **Shortcuts and polish.** Pinned tag shortcuts, "most used" sorting, first-run explanation.
 8. **First release.** Signed APK on GitHub Releases with the certificate fingerprint in the README; split APKs ready for Accrescent.
 
 ## Open decisions
 
-- **Widget style**: one widget per label, or one widget with label tabs (asked in the README).
+- **Widget style**: one widget per tag, or one widget with tag tabs (asked in the README).
 - **Rule file details**: as above, pending feedback.
 - **Starter rules**: whether a starter rule file ships with the app, and what's in it.
 - **Widgets library**: Glance or `RemoteViews` (milestone 3).
+
+## Decisions
+
+- **2026-11-26: tags, not labels.** AppFiler calls them tags. Tags is the modern word (hashtags, tag clouds, Kvaesitso's tags), shorter on widgets and buttons, and makes it clear one app can carry several. Labels came from Apps Organizer/Apps2Org, whose README already called it "label/tag based". Agreed in the open on the forum: https://discuss.appfiler.org/d/6-tags-or-labels
 
 ## Release and signing
 
