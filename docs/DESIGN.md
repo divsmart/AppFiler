@@ -101,7 +101,7 @@ dev.soupslurpr.*             Tools
 
 You never need to edit the rule file. Filing happens in the app, and the file is for power users and for sharing.
 
-This is open for comment in the forum and Discussions, and may change before milestone 5.
+The line format is decided (see "Decisions"). Details not yet settled, such as the pattern syntax, are open for comment on the forum: https://discuss.appfiler.org. They may change before milestone 5.
 
 ## Build order
 
@@ -109,7 +109,7 @@ Each milestone ends with a working build installed on a real phone, and the hard
 
 1. **Skeleton.** Empty Compose app, final app ID, manifest with no permissions, release signing set up. Builds and installs.
 2. **App list and tags.** List launchable apps; create, rename, reorder and delete tags (including in place from the chip list); assign apps with tag chips and multi-select; drag to reorder; long-press menu equivalents; undo.
-3. **Widgets.** A widget per tag that opens apps, in the order set in AppFiler.
+3. **Widgets.** One widget type with optional tag tabs, opening apps in the order set in AppFiler. Starts with a throwaway test widget on the Pixel (scrolling tab column beside a scrolling grid).
 4. **Inbox.** New-install detection and the "Other Apps" view, with suggested-tag chips.
 5. **Rules.** Rule file parsing, automatic tagging, Android-category fallback, the first-run summary, and offering to turn manual filing into rules.
 6. **Export and import.**
@@ -118,12 +118,13 @@ Each milestone ends with a working build installed on a real phone, and the hard
 
 ## Open decisions
 
-- **Rule file details**: as above, pending feedback.
-- **Starter rules**: whether a starter rule file ships with the app, and what's in it.
+- **Rule file pattern syntax**: whether a trailing `*` prefix match is enough, pending feedback.
 - **Widgets library**: Glance or `RemoteViews` (milestone 3).
 
 ## Decisions
 
+- **2026-11-24: rule file format.** Plain `app.id Tag` lines. Decided in [GitHub Discussion #5](https://github.com/divsmart/AppFiler/discussions/5) with DryfterX.
+- **2026-11-24: starter rules.** A starter rule file covers stock apps only, starting with GrapheneOS's own apps. It's offered at first run and never applied silently. Every package name is verified before it goes in. Decided in [GitHub Discussion #5](https://github.com/divsmart/AppFiler/discussions/5) with DryfterX.
 - **2026-11-26: tags, not labels.** AppFiler calls them tags. Tags is the modern word (hashtags, tag clouds, Kvaesitso's tags), shorter on widgets and buttons, and makes it clear one app can carry several. Labels came from Apps Organizer/Apps2Org, whose README already called it "label/tag based". Agreed in the open on the forum: https://discuss.appfiler.org/d/6-tags-or-labels
 - **2026-11-26: one widget type, with optional tag tabs.** This settles the old open question of one widget per tag versus one widget with tag tabs: the single widget type does both, depending on how many tags it's given to show. See "Widgets" under "How things work". Thanks to DryfterX for the mockup in [GitHub Discussion #4](https://github.com/divsmart/AppFiler/discussions/4).
 

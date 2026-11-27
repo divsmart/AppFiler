@@ -40,7 +40,7 @@ The aim is an app that never asks you to approve a permission at all. These rule
 
 **Tags.** Give any app as many tags as you like. One app can sit under both Banking and Travel.
 
-**A widget per tag.** Put a Banking widget, a Tools widget, a Church widget on your home screen, the way Apps2Org did. Tap an icon in the widget and the app opens. Your launcher stays untouched.
+**One widget, one tag or several.** Put a Banking widget, a Tools widget, a Church widget on your home screen, the way Apps2Org did: give a widget one tag and it shows that tag's apps as a plain grid. Or give one widget several tags, and it adds a vertical column of tabs down the side, with Favorites at the top. Tap an icon in the widget and the app opens. Your launcher stays untouched.
 
 **An "Other Apps" inbox.** Each time AppFiler opens, it checks for apps installed since last time. Anything not yet tagged waits in the inbox, so new installs are never lost.
 
