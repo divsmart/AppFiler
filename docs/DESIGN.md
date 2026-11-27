@@ -51,7 +51,9 @@ Storage is Room (AndroidX) in the app's private storage.
 
 **Automatic tagging.** Rules first, then Android's own category (game, audio, video, image, social, news, maps, productivity) for apps whose developer set one. See "Interaction design" for how user choices take priority.
 
-**Widgets.** One widget instance per tag, chosen when the widget is placed. Tapping an icon opens that app directly. Whether to build widgets with Glance (AndroidX) or plain `RemoteViews` is decided at milestone 3.
+**Widgets.** There is one widget type. When it's placed, the user picks which tags it shows. With one tag there's no tab column, and it works as a per-tag widget. With several tags it adds a vertical tab column, with Favorites pinned at the top; a tab can be text, an emoji or an icon. Each widget instance remembers its selected tab. Widgets scroll vertically only. Tapping an icon opens that app directly. Widget text size and an option to show icons with or without names are part of the first widget version. Whether to build widgets with Glance (AndroidX) or plain `RemoteViews` is decided at milestone 3.
+
+A scrolling tab column beside a scrolling app grid in the same widget must be tested on the Pixel early in milestone 3, with a throwaway test widget, before the real widget work starts. If it fails, the fallback is a fixed (non-scrolling) tab column beside a scrolling grid.
 
 **Shortcuts.** Pinned shortcuts that open AppFiler straight to one tag, or to the inbox.
 
@@ -97,6 +99,8 @@ dev.soupslurpr.*             Tools
 - An app matching several rules gets every matching tag
 - Lines that don't parse are reported to the user, never silently dropped
 
+You never need to edit the rule file. Filing happens in the app, and the file is for power users and for sharing.
+
 This is open for comment in the forum and Discussions, and may change before milestone 5.
 
 ## Build order
@@ -114,7 +118,6 @@ Each milestone ends with a working build installed on a real phone, and the hard
 
 ## Open decisions
 
-- **Widget style**: one widget per tag, or one widget with tag tabs (asked in the README).
 - **Rule file details**: as above, pending feedback.
 - **Starter rules**: whether a starter rule file ships with the app, and what's in it.
 - **Widgets library**: Glance or `RemoteViews` (milestone 3).
@@ -122,6 +125,7 @@ Each milestone ends with a working build installed on a real phone, and the hard
 ## Decisions
 
 - **2026-11-26: tags, not labels.** AppFiler calls them tags. Tags is the modern word (hashtags, tag clouds, Kvaesitso's tags), shorter on widgets and buttons, and makes it clear one app can carry several. Labels came from Apps Organizer/Apps2Org, whose README already called it "label/tag based". Agreed in the open on the forum: https://discuss.appfiler.org/d/6-tags-or-labels
+- **2026-11-26: one widget type, with optional tag tabs.** This settles the old open question of one widget per tag versus one widget with tag tabs: the single widget type does both, depending on how many tags it's given to show. See "Widgets" under "How things work". Thanks to DryfterX for the mockup in [GitHub Discussion #4](https://github.com/divsmart/AppFiler/discussions/4).
 
 ## Release and signing
 

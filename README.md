@@ -53,7 +53,7 @@ dev.soupslurpr.beautyxt      Writing
 helium314.keyboard           Tools
 ```
 
-New installs that match a rule are tagged straight away. Android's own app categories (game, audio, social, productivity and so on) fill the gaps where a developer has set one. The rule file is yours to read and edit, with no guessing and nothing fetched from the internet.
+New installs that match a rule are tagged straight away. Android's own app categories (game, audio, social, productivity and so on) fill the gaps where a developer has set one. The rule file is yours to read and edit, with no guessing and nothing fetched from the internet. You never need to edit the rule file. Filing happens in the app, and the file is for power users and for sharing.
 
 **Plain-text export and import.** Tags and rules export to a readable file, so a factory reset or a new phone doesn't cost you your setup, and you can see exactly what's in it.
 
@@ -135,9 +135,8 @@ GPL-3.0-or-later, continuing the Apps Organizer and Apps2Org line. Fork it, chan
 
 ## Comments wanted
 
-Before any code gets written, it would help to hear:
+Still open, and your input helps:
 
-- Is a widget per tag the right way in, or would you rather have one widget with tag tabs?
-- What should the rule file look like? Plain `app-id tag` lines, or something more structured?
-- Which apps would you want tagged out of the box, if a starter rule file shipped with the app?
 - Anything here that would stop you trusting it?
+
+Design discussion happens on the forum: https://discuss.appfiler.org
