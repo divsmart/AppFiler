@@ -6,6 +6,8 @@ This is the working design: what's decided, what's still open, and the order thi
 
 AppFiler is an ordinary Android app that sorts installed apps under user-defined tags and opens them from home-screen widgets and shortcuts. It is **not a launcher**: it never registers as a home screen, and the user's launcher stays exactly as it is.
 
+It stays small on purpose: small enough for one maintainer to keep working through each new Android release. A feature that doesn't help organize apps under tags doesn't go in, however nice it would be.
+
 ## Hard constraints
 
 These are fixed. Any change that breaks one is wrong, however useful it seems.
@@ -41,13 +43,13 @@ API 26 is the floor because three things the design depends on arrived in it: `P
 - **Rule**: a pattern and a tag, from the rule file.
 - **Launch count**: per app, counting only launches made through AppFiler. Used for "most used" sorting.
 
-Storage is Room (AndroidX) in the app's private storage.
+Storage is Room (AndroidX) in the app's private storage. The database schema is exported and versioned from the first release. Every schema change ships with a migration and a test that it keeps existing tags, and destructive migrations are never used.
 
 ## How things work
 
-**Finding apps.** Query the package manager for activities matching `MAIN`/`LAUNCHER`. That's every app with a launcher icon, and nothing else.
+**Finding apps.** Query the package manager for activities matching `MAIN`/`LAUNCHER`. That's every app with a launcher icon, and nothing else. Apps with no launcher activity never appear, and the README says so, so nobody expects more.
 
-**New installs.** On each start, call `getChangedPackages()` with the last sequence number seen. New apps are matched against the rules; anything no rule matches goes to the "Other Apps" inbox. Uninstalled apps are removed from their tags. No permanent broadcast receiver is needed.
+**New installs.** On each start, call `getChangedPackages()` with the last sequence number seen. New apps are matched against the rules; anything no rule matches goes to the "Other Apps" inbox. Uninstalled apps are removed from their tags. An updated app keeps its tags. No permanent broadcast receiver is needed.
 
 **Automatic tagging.** Rules first, then Android's own category (game, audio, video, image, social, news, maps, productivity) for apps whose developer set one. See "Interaction design" for how user choices take priority.
 
@@ -114,12 +116,15 @@ Each milestone ends with a working build installed on a real phone, and the hard
 5. **Rules.** Rule file parsing, automatic tagging, Android-category fallback, the first-run summary, and offering to turn manual filing into rules.
 6. **Export and import.**
 7. **Shortcuts and polish.** Pinned tag shortcuts, "most used" sorting, first-run explanation.
-8. **First release.** Signed APK on GitHub Releases with the certificate fingerprint in the README; split APKs ready for Accrescent.
+8. **First release.** Signed APK on GitHub Releases with the certificate fingerprint in the README and the APK checksum in the release notes; the release checks above passed; `assetlinks.json` live on appfiler.org; submitted to Privacy Guides' Verified Apps; split APKs ready for Accrescent.
 
 ## Open decisions
 
 - **Rule file pattern syntax**: whether a trailing `*` prefix match is enough, pending feedback.
 - **Widgets library**: Glance or `RemoteViews` (milestone 3).
+- **Tag names with spaces in the rule file**: proposal: everything after the first run of whitespace is the tag name, so `app.id   Bible study` works.
+- **Disabled apps**: proposal: hide them from tags and widgets but keep their tags, so re-enabling an app brings it back where it was.
+- **Work profiles and secondary users**: which profiles AppFiler supports. Until decided, it's tested in the main profile only, and anything else isn't treated as a bug.
 
 ## Decisions
 
@@ -127,9 +132,20 @@ Each milestone ends with a working build installed on a real phone, and the hard
 - **2026-11-24: starter rules.** A starter rule file covers stock apps only, starting with GrapheneOS's own apps. It's offered at first run and never applied silently. Every package name is verified before it goes in. Decided in [GitHub Discussion #5](https://github.com/divsmart/AppFiler/discussions/5) with DryfterX.
 - **2026-11-26: tags, not labels.** AppFiler calls them tags. Tags is the modern word (hashtags, tag clouds, Kvaesitso's tags), shorter on widgets and buttons, and makes it clear one app can carry several. Labels came from Apps Organizer/Apps2Org, whose README already called it "label/tag based". Agreed in the open on the forum: https://discuss.appfiler.org/d/6-tags-or-labels
 - **2026-11-26: one widget type, with optional tag tabs.** This settles the old open question of one widget per tag versus one widget with tag tabs: the single widget type does both, depending on how many tags it's given to show. See "Widgets" under "How things work". Thanks to DryfterX for the mockup in [GitHub Discussion #4](https://github.com/divsmart/AppFiler/discussions/4).
+- **2026-11-27: release signing key created.** Details under "Release and signing". The fingerprint is published now, ahead of the first release, so it can be checked against every future build.
 
 ## Release and signing
 
-- A release key is created once, before milestone 1 is finished, and backed up off the machine. Losing it means users can't update.
-- Every release is signed with it; its SHA-256 fingerprint is published in the README.
-- No release is made without the permission check above passing.
+- The release key was created on 2026-11-27: RSA 4096, PKCS12, alias `appfiler`, owner `CN=AppFiler, O=AppFiler`. It lives outside the repository and is backed up offline. Losing it means users can't update, so the backups are tested by restoring them before the first release.
+- The maintainer generates and uses the key by hand. AI tools never create, read or handle it or its password.
+- Gradle reads the key's path and password from `keystore.properties`, which is git-ignored, like the key file itself.
+- SHA-256 certificate fingerprint: `61:50:B0:89:BC:ED:7C:AB:6C:54:D7:D8:C8:12:82:1E:2A:B2:94:1F:20:3F:A7:2B:87:31:F2:DC:58:E4:E9:22`. It's published in the README, on the website and in release notes. Only SHA-256 is published, never SHA-1.
+- `https://appfiler.org/.well-known/assetlinks.json` publishes the package name and fingerprint. It's served directly on the bare domain, not through a redirect to www, so that verifiers can fetch it.
+- With the first release, AppFiler is submitted to Privacy Guides' Verified Apps database (github.com/privacyguides/verified-apps, app-submission issue).
+
+Before every release, these checks must pass. They're run by hand at first, and become a script once releases are regular:
+
+1. `aapt2 dump permissions` on the built APK lists no permissions.
+2. The merged manifest has `android:allowBackup="false"` and the data-extraction rules excluding everything.
+3. `apksigner verify --print-certs` shows the published SHA-256 fingerprint, not a debug key.
+4. No new dependency has come in, directly or transitively, since the last release without being reviewed.

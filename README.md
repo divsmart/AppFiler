@@ -20,6 +20,8 @@ Anyone who used Android a decade ago may remember Apps Organizer and its fork Ap
 
 The stock GrapheneOS launcher is good at its job and it's staying where it is. What's missing is a way to organize apps by *what they're for*—Banking, Travel, Church, Tools—without manually juggling folders, and without handing a third-party launcher the keys to the phone.
 
+If you've used an iPhone, the closest thing is Apple's App Library, which sorts your apps into categories Apple chooses. AppFiler starts from the same idea but leaves you in charge: you choose the tags, one app can carry several, and your launcher stays as it is.
+
 AppFiler aims to bring that workflow back, rebuilt for current Android.
 
 ## Privacy first
@@ -29,12 +31,14 @@ An app organizer sees every app you have installed and which ones you open. That
 So the rules are fixed from day one:
 
 - **No `INTERNET` permission, and no network code at all.** The app has no way to send anything anywhere, whatever ROM it runs on.
-- **Sees only launchable apps.** It asks Android only for apps that have a launcher icon, which is all it needs. It never requests `QUERY_ALL_PACKAGES`.
+- **Sees only launchable apps.** It asks Android only for apps that have a launcher icon, which is all it needs. It never requests `QUERY_ALL_PACKAGES`. Apps with no launcher icon, such as some system components, don't appear in AppFiler at all.
 - **No usage-access permission.** "Most used" sorting counts only the apps you open *through AppFiler*, never your system-wide usage history.
 - **No storage permission.** Exports and imports go through Android's own file picker, which grants access to the one file you choose.
 - **No proprietary code.** No Google Play Services, Firebase, analytics or crash reporting. The only dependencies are Kotlin, AndroidX and Jetpack Compose, all under the Apache 2.0 licence.
 - **No automatic cloud backup.** Tags and rules stay in the app's private storage until *you* export them.
 - **No built-in updater.** The app never checks for updates or downloads anything. Updates come through Obtainium or an app store, where you stay in control.
+
+No permissions doesn't mean no information. To do its job, AppFiler reads the list of apps that have a launcher icon, and keeps your tags, your rules and its own launch counts in its private storage. All of it stays on the phone, and none of it leaves unless you export it.
 
 The aim is an app that never asks you to approve a permission at all. These rules aren't up for negotiation in pull requests either—see [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -68,15 +72,19 @@ Official builds are published in one place for now: this repository's **GitHub R
 Every official build is signed with the same key. Before installing, check that the signing certificate matches:
 
 ```
-Package name:  (to be published with the first release)
-SHA-256:       (to be published with the first release)
+Package name:  org.appfiler
+SHA-256:       61:50:B0:89:BC:ED:7C:AB:6C:54:D7:D8:C8:12:82:1E:2A:B2:94:1F:20:3F:A7:2B:87:31:F2:DC:58:E4:E9:22
 ```
+
+With the first release, the same fingerprint will also be published on the website and in a Digital Asset Links file on appfiler.org, and submitted to Privacy Guides' Verified Apps database. Someone faking AppFiler would have to control this repository and the domain at the same time.
 
 You can check it with [AppVerifier](https://github.com/soupslurpr/AppVerifier), with Privacy Guides' [Verified Apps](https://github.com/privacyguides/verified-apps), or on a computer with:
 
 ```bash
 apksigner verify --print-certs AppFiler-<version>.apk
 ```
+
+The certificate fingerprint above identifies who signed the app, and it never changes. Each release also lists a SHA-256 checksum of the APK file itself, which identifies that one download. Both are useful, but they answer different questions.
 
 **A build signed with any other key isn't ours.** The GPL lets anyone rebuild and redistribute the app, which is as it should be, but a copy signed with a different key comes from whoever built it, not from this project. That includes repositories that build and sign apps with their own keys.
 
@@ -99,6 +107,7 @@ On the phone, Settings → Apps → AppFiler → Permissions shows the same thin
 - Kotlin and Jetpack Compose, targeting current Android
 - Minimum Android 8.0 (API 26), the first version where Android can report which apps changed since the last check
 - Developed and tested on GrapheneOS
+- Tested in the phone's main user profile; support for work profiles and other user profiles is still to be decided
 - Signed APKs on GitHub Releases, with SHA-256 checksums
 - No self-updating code, in line with the rules of security-focused stores such as Accrescent
 
@@ -111,7 +120,7 @@ This project borrows ideas, and possibly code, from:
 - **[AppStow](https://github.com/1260er/AppStow)**, for multi-category apps, new-install detection and counting only its own launches. GPL-3.0-or-later.
 - **[Pixel Tag Drawer](https://github.com/iwadjp/pixel-tag-drawer)**, for shortcuts that open one tag and an untagged view. MIT.
 
-Any code taken from these projects keeps its original copyright notice.
+So far these are ideas, not code. Any code taken from these projects keeps its original copyright notice, and the commit that adds it names the source project and the commit it came from.
 
 ## Contributing
 

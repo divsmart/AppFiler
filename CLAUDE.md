@@ -74,6 +74,9 @@ or build services that download anything.
 - Kotlin + Jetpack Compose, `minSdk` 26, target the current Android version.
 - Release signing reads `keystore.properties`, which is git-ignored. Never
   create, commit or print signing keys or passwords.
+- The release key lives outside the repository and the maintainer uses it by
+  hand. Never look for it, read it or ask for its password. The public SHA-256
+  fingerprint is in `docs/DESIGN.md` ("Release and signing").
 
 ## Commits
 
