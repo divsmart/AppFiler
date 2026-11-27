@@ -15,9 +15,8 @@ Check the existing issues first. If someone has already reported the same proble
 
 ## Have a question or an idea?
 
-Use [Discussions](../../discussions) for questions about using the app, ideas for features, and sharing your rule files. Ideas that gather support there become issues.
+Use the AppFiler forum, https://discuss.appfiler.org, for questions about using the app, ideas for features, and sharing your rule files. Ideas that gather support there become issues. Bug reports still go in [Issues](../../issues), as above.
 
-You'll also find people using AppFiler in the GrapheneOS forum.
 
 ## Found a security problem?
 

@@ -2,6 +2,8 @@
 
 A tag-based app organizer for Android that works *alongside* your launcher, not instead of it. Built for GrapheneOS first, with privacy as the one non-negotiable.
 
+Website: https://www.appfiler.org · Forum: https://discuss.appfiler.org
+
 > **A word to our French-speaking users:** yes, we know. In French, *filer quelqu'un* means to tail them, the way the police shadow a suspect—and an app that follows you around is the last thing this project wants to be. The name is English: a filer is someone who files things away. AppFiler files your apps under tags, and the only thing it ever follows is your rule file.
 >
 > *Rassurez-vous : aucune filature ici. AppFiler range vos applis, rien de plus.*
